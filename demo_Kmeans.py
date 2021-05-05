@@ -1,5 +1,6 @@
 import pygame
 from random import randint
+import math
 
 def create_button_content(buttonName, buttonColor,fontSize):
     font = pygame.font.SysFont('sans', fontSize)
@@ -8,6 +9,9 @@ def create_button_content(buttonName, buttonColor,fontSize):
 def create_button_rect(content, color,buttonDimension, contentDimension):
     pygame.draw.rect(screen, color, buttonDimension)
     screen.blit(content, contentDimension)
+
+def distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
 pygame.init()
 
@@ -67,6 +71,7 @@ k = 0
 error = 0
 points = []
 clusters = []
+labels = []
 
 while running:
     clock.tick(FPS)
@@ -86,10 +91,6 @@ while running:
     create_button_rect(TEXT_ALGORITHM, BLACK, ALGORITHM_BUTTON_DIMENSION, ALGORITHM_CONTENT_DIMENSION)
     create_button_rect(TEXT_RESET, BLACK, RESET_BUTTON_DIMENSION, RESET_CONTENT_DIMENSION)
 
-    # Error text
-    TEXT_ERROR = create_button_content('Error = ' + str(error), BLACK, BIG_SIZE)
-    screen.blit(TEXT_ERROR, (850, 350))
-
     # K value
     TEXT_K = create_button_content('K = ' + str(k), BLACK, BIG_SIZE)
     screen.blit(TEXT_K, (1050, 50))
@@ -108,6 +109,7 @@ while running:
 
             # point position storage
             if 50 < mouse_x < 750 and 50 < mouse_y < 550:
+                labels = []
                 point = [mouse_x - 50, mouse_y - 50]
                 points.append(point)
 
@@ -123,7 +125,30 @@ while running:
 
             # Run button
             if 850 < mouse_x < 1000 and 150 < mouse_y < 200:
-                print('Run button')
+                labels = []
+                for point in points:
+                    distancesToCluster = []
+                    for cluster in clusters:
+                        distancesToCluster.append(distance(point, cluster))
+                    
+                    minDistance = min(distancesToCluster)
+                    label = distancesToCluster.index(minDistance)
+                    labels.append(label)
+
+                # Update clusters
+                for i in range(k):
+                    sum_x = 0
+                    sum_y = 0
+                    count = 0
+                    for j in range(len(points)):
+                        if labels[j] == i:
+                            sum_x += points[j][0]
+                            sum_y += points[j][1]
+                            count += 1
+                    if count != 0:
+                        new_pos_x = sum_x / count
+                        new_pos_y = sum_y / count
+                        clusters[i] = [int(new_pos_x), int(new_pos_y)]
             
             # Random button
             if 850 < mouse_x < 1000 and 250 < mouse_y < 300:
@@ -148,7 +173,18 @@ while running:
     for i in range(len(points)):
         # surface, color, center, radius
         pygame.draw.circle(screen, BLACK, (points[i][0] + 50, points[i][1] + 50), 6)
-        pygame.draw.circle(screen, WHITE, (points[i][0] + 50, points[i][1] + 50), 5)   
+        if labels == []:
+            pygame.draw.circle(screen, WHITE, (points[i][0] + 50, points[i][1] + 50), 5)   
+        else:
+            pygame.draw.circle(screen, COLORS[labels[i]], (points[i][0] + 50, points[i][1] + 50), 5)
+
+    # Calculate and draw error
+    if clusters != [] and labels != []:
+        error = 0
+        for i in range(len(points)):
+            error += distance(points[i], clusters[labels[i]])
+    TEXT_ERROR = create_button_content("Error = " + str(int(error)), BLACK, BIG_SIZE)
+    screen.blit(TEXT_ERROR, (850, 350))
 
     # Update the full display Surface to the screen
     pygame.display.flip()
