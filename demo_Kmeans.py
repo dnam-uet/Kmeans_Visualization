@@ -1,7 +1,7 @@
 import pygame
 
-def create_button_content(buttonName, buttonColor):
-    font = pygame.font.SysFont('sans', 40)
+def create_button_content(buttonName, buttonColor,fontSize):
+    font = pygame.font.SysFont('sans', fontSize)
     return font.render(buttonName, True, buttonColor)
 
 def create_button_rect(content, color,buttonDimension, contentDimension):
@@ -19,6 +19,9 @@ running = True
 clock = pygame.time.Clock()
 
 FPS = 60
+
+BIG_SIZE = 40
+SMALL_SIZE = 20
 
 BACKGROUND = (215, 215, 215)
 BLACK = (0, 0, 0)
@@ -40,19 +43,21 @@ ALGORITHM_CONTENT_DIMENSION = (850, 450)
 RESET_BUTTON_DIMENSION = (850, 550, 150, 50)
 RESET_CONTENT_DIMENSION = (850, 550)
 
-TEXT_PLUS = create_button_content('+', WHITE)
-TEXT_MINUS = create_button_content('-', WHITE)
-TEXT_RUN = create_button_content('Run', WHITE)
-TEXT_RANDOM = create_button_content('Random', WHITE)
-TEXT_ALGORITHM = create_button_content('Algorithm', WHITE)
-TEXT_RESET = create_button_content('Reset', WHITE)
+TEXT_PLUS = create_button_content('+', WHITE, BIG_SIZE)
+TEXT_MINUS = create_button_content('-', WHITE, BIG_SIZE)
+TEXT_RUN = create_button_content('Run', WHITE, BIG_SIZE)
+TEXT_RANDOM = create_button_content('Random', WHITE, BIG_SIZE)
+TEXT_ALGORITHM = create_button_content('Algorithm', WHITE, BIG_SIZE)
+TEXT_RESET = create_button_content('Reset', WHITE, BIG_SIZE)
 
 k = 0
 error = 0
+points = []
 
 while running:
     clock.tick(FPS)
     screen.fill(BACKGROUND)
+    mouse_x, mouse_y = pygame.mouse.get_pos()
 
    # Draw interface
     # Draw panel
@@ -68,21 +73,30 @@ while running:
     create_button_rect(TEXT_RESET, BLACK, RESET_BUTTON_DIMENSION, RESET_CONTENT_DIMENSION)
 
     # Error text
-    TEXT_ERROR = create_button_content('Error = ' + str(error), BLACK)
+    TEXT_ERROR = create_button_content('Error = ' + str(error), BLACK, BIG_SIZE)
     screen.blit(TEXT_ERROR, (850, 350))
 
     # K value
-    TEXT_K = create_button_content('K = ' + str(k), BLACK)
+    TEXT_K = create_button_content('K = ' + str(k), BLACK, BIG_SIZE)
     screen.blit(TEXT_K, (1050, 50))
 
-    # End draw interface
+    # Draw mouse position when mouse is in panel
+    if 50 < mouse_x < 750 and 50 < mouse_y < 550:
+        text_mouse = create_button_content("(" + str(mouse_x-50) + "," + str(mouse_y-50) + ")",BLACK, SMALL_SIZE)
+        screen.blit(text_mouse, (mouse_x + 15, mouse_y))
 
-    mouse_x, mouse_y = pygame.mouse.get_pos()
+    # End draw interface
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
+
+            # point position storage
+            if 50 < mouse_x < 750 and 50 < mouse_y < 550:
+                point = [mouse_x - 50, mouse_y - 50]
+                points.append(point)
+
             # K + button
             if 850 < mouse_x < 900 and 50 < mouse_y < 100:
                 k += 1
@@ -107,6 +121,12 @@ while running:
             # Reset button
             if 850 < mouse_x < 1000 and 550 < mouse_y < 600:
                 print('Reset button')
+
+    # Draw points
+    for i in range(len(points)):
+        # surface, color, center, radius
+        pygame.draw.circle(screen, BLACK, (points[i][0] + 50, points[i][1] + 50), 6)
+        pygame.draw.circle(screen, WHITE, (points[i][0] + 50, points[i][1] + 50), 5)   
 
     # Update the full display Surface to the screen
     pygame.display.flip()
