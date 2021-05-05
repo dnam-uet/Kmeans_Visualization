@@ -1,8 +1,12 @@
 import pygame
 
-def create_button(buttonName, buttonColor):
+def create_button_content(buttonName, buttonColor):
     font = pygame.font.SysFont('sans', 40)
     return font.render(buttonName, True, buttonColor)
+
+def create_button_rect(content, color,buttonDimension, contentDimension):
+    pygame.draw.rect(screen, color, buttonDimension)
+    screen.blit(content, contentDimension)
 
 pygame.init()
 
@@ -21,13 +25,17 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BACKGROUND_PANEL = (249, 255, 230)
 
+K_PLUS_BUTTON_DIMENSION = (850, 50, 50, 50)
+K_PLUS_CONTENT_DIMENSION = (860, 50)
+K_MINUS_BUTTON_DIMENSION = (950, 50, 50, 50)
+K_MINUS_CONTENT_DIMENSION = (960, 50)
 
-TEXT_PLUS = create_button('+', WHITE)
-TEXT_MINUS = create_button('-', WHITE)
-TEXT_RUN = create_button('Run', WHITE)
-TEXT_RANDOM = create_button('Random', WHITE)
-TEXT_ALGORITHM = create_button('Algorithm', WHITE)
-TEXT_RESET = create_button('Reset', WHITE)
+TEXT_PLUS = create_button_content('+', WHITE)
+TEXT_MINUS = create_button_content('-', WHITE)
+TEXT_RUN = create_button_content('Run', WHITE)
+TEXT_RANDOM = create_button_content('Random', WHITE)
+TEXT_ALGORITHM = create_button_content('Algorithm', WHITE)
+TEXT_RESET = create_button_content('Reset', WHITE)
 
 k = 0
 
@@ -41,15 +49,13 @@ while running:
     pygame.draw.rect(screen, BACKGROUND_PANEL, (55, 55, 690, 490))
     
     # K button +
-    pygame.draw.rect(screen, BLACK, (850, 50, 50, 50))
-    screen.blit(TEXT_PLUS, (860, 50))
+    create_button_rect(TEXT_PLUS, BLACK, K_PLUS_BUTTON_DIMENSION, K_PLUS_CONTENT_DIMENSION)
 
     # K button -
-    pygame.draw.rect(screen, BLACK, (950, 50, 50, 50))
-    screen.blit(TEXT_MINUS, (960, 50))
+    create_button_rect(TEXT_MINUS, BLACK, K_MINUS_BUTTON_DIMENSION, K_MINUS_CONTENT_DIMENSION)
 
     # K value
-    TEXT_K = create_button('K = ' + str(k), BLACK)
+    TEXT_K = create_button_content('K = ' + str(k), BLACK)
     screen.blit(TEXT_K, (1050, 50))
 
     # Run button
