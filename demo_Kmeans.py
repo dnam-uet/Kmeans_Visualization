@@ -1,6 +1,7 @@
 import pygame
 from random import randint
 import math
+from sklearn.cluster import KMeans
 
 def create_button_content(buttonName, buttonColor,fontSize):
     font = pygame.font.SysFont('sans', fontSize)
@@ -126,6 +127,9 @@ while running:
             # Run button
             if 850 < mouse_x < 1000 and 150 < mouse_y < 200:
                 labels = []
+
+                if clusters == []:
+                    continue
                 for point in points:
                     distancesToCluster = []
                     for cluster in clusters:
@@ -152,6 +156,7 @@ while running:
             
             # Random button
             if 850 < mouse_x < 1000 and 250 < mouse_y < 300:
+                labels = []
                 clusters = []
                 for i in range(k):
                     random_point = [randint(0, 690), randint(0, 490)]
@@ -159,11 +164,17 @@ while running:
 
             # Algorithm button
             if 850 < mouse_x < 1000 and 450 < mouse_y < 500:
-                print('Algorithm button')
+                kmeans = KMeans(n_clusters=k).fit(points)
+                labels = kmeans.predict(points)
+                clusters = kmeans.cluster_centers_
             
             # Reset button
             if 850 < mouse_x < 1000 and 550 < mouse_y < 600:
-                print('Reset button')
+                points = []
+                clusters = []
+                labels = []
+                k = 0
+                error = 0
 
     # Draw cluster
     for i in range(len(clusters)):
