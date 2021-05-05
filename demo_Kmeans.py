@@ -1,4 +1,5 @@
 import pygame
+from random import randint
 
 def create_button_content(buttonName, buttonColor,fontSize):
     font = pygame.font.SysFont('sans', fontSize)
@@ -24,9 +25,21 @@ BIG_SIZE = 40
 SMALL_SIZE = 20
 
 BACKGROUND = (215, 215, 215)
+BACKGROUND_PANEL = (249, 255, 230)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-BACKGROUND_PANEL = (249, 255, 230)
+
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+YELLOW = (147, 153, 35)
+PURPLE = (255, 0, 255)
+SKY = (0, 255, 255)
+ORANGE = (255, 125, 25)
+GRAPE = (100, 25, 125)
+GRASS = (55, 155, 65)
+
+COLORS = [RED, GREEN, BLUE, YELLOW, PURPLE, SKY, ORANGE, GRAPE, GRASS]
 
 # (x, y, width, height)
 # (x, y)
@@ -53,6 +66,7 @@ TEXT_RESET = create_button_content('Reset', WHITE, BIG_SIZE)
 k = 0
 error = 0
 points = []
+clusters = []
 
 while running:
     clock.tick(FPS)
@@ -99,7 +113,8 @@ while running:
 
             # K + button
             if 850 < mouse_x < 900 and 50 < mouse_y < 100:
-                k += 1
+                if k < 9:
+                    k += 1
 
             # K - button
             if 950 < mouse_x < 1000 and 50 < mouse_y < 100:
@@ -112,7 +127,10 @@ while running:
             
             # Random button
             if 850 < mouse_x < 1000 and 250 < mouse_y < 300:
-                print('Random button')
+                clusters = []
+                for i in range(k):
+                    random_point = [randint(0, 690), randint(0, 490)]
+                    clusters.append(random_point)
 
             # Algorithm button
             if 850 < mouse_x < 1000 and 450 < mouse_y < 500:
@@ -122,7 +140,11 @@ while running:
             if 850 < mouse_x < 1000 and 550 < mouse_y < 600:
                 print('Reset button')
 
-    # Draw points
+    # Draw cluster
+    for i in range(len(clusters)):
+        pygame.draw.circle(screen, COLORS[i], (clusters[i][0] + 50, clusters[i][1] + 50), 10)
+
+    # Draw point
     for i in range(len(points)):
         # surface, color, center, radius
         pygame.draw.circle(screen, BLACK, (points[i][0] + 50, points[i][1] + 50), 6)
