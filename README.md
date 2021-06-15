@@ -2,7 +2,18 @@
 I create my own Kmeans algorithms and compare with KMeans (sklearn.cluster) algorithm. This is a pet project with Kmeans Algorithms using Pygame for UI, and sklearn.cluster (KMeans) for Algorithms button.
 
 
-First of all, you need to install python and pygame on your local computer.
+First of all, you need to install python and pygame on your local computer. 
+Clone this repo by 
+
+```console
+git clone https://github.com/dnam-uet/Kmeans_Visualization.git
+```
+
+Run code by
+
+```Python
+python <python file clone>
+```
 
 This is main screen
 
