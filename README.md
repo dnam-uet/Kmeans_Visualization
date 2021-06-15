@@ -6,26 +6,26 @@ First of all, you need to install python and pygame on your local computer.
 
 This is main screen
 
-![main]('./img/Main.png')
+![main](https://github.com/dnam-uet/Kmeans_Visualization/blob/master/img/Main.PNG)
 
 Step 1: You need to click on white board some point like this
 
-![step1]('./img/step1.png')
+![step1](https://github.com/dnam-uet/Kmeans_Visualization/blob/master/img/step1.PNG)
 
 Step 2: You need to click + button or - button for K parameter
 
-![step2]('./img/step2.png')
+![step2](https://github.com/dnam-uet/Kmeans_Visualization/blob/master/img/step2.PNG)
 
 Step 3: You need to click random button for random K cluster
 
-![step3]('./img/step3.png')
+![step3](https://github.com/dnam-uet/Kmeans_Visualization/blob/master/img/step3.PNG)
 
 Step 4: And run button, you can see error (sum of distance point to cluster it's label)
 
-![step4]('./img/step4.png')
+![step4](https://github.com/dnam-uet/Kmeans_Visualization/blob/master/img/step4.PNG)
 
 Step 5: Run again, you can see decreasing error
 
-![step5]('./img/step5.png')
+![step5](https://github.com/dnam-uet/Kmeans_Visualization/blob/master/img/step5.PNG)
 
 You can click algorithm to run Kmeans algorithm from KMeans. 
